@@ -3,22 +3,118 @@
 
 <head>
     <title>GG maps</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <link rel="stylesheet" type="text/css" href="./css/styles.css"/>
     <script src="./js/index.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 
 <body>
-    <div id="floating-panel">
-        <input id="hide-markers" type="button" value="Hide Markers" />
-        <input id="show-markers" type="button" value="Show Markers" />
-        <input id="delete-markers" type="button" value="Delete Markers" />
+    
+<!-- 
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="display:block;">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-nav">
+        <input id="hide-markers" type="button" value="Hide Markers" class="btn btn-light mx-5"/>
+        <input id="show-markers" type="button" value="Show Markers"  class="btn btn-light mx-4"/>
+        <input id="delete-markers" type="button" value="Delete Markers"  class="btn btn-light mx-5"/>
+            </div>
+        </div>
     </div>
-    <div id="map"></div>
-    <p>Click on the map to add markers.</p>
+</nav> -->
+
+        <div id="map"></div>
+    
+
+            <div class="container">
+                <div class="row mt-lg-5">
+                    <form id="form" name="form1">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" name="name" class="form-control" id="Name"  placeholder="Name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <input type="text" name="description" class="form-control" id="Description" placeholder="Description">
+                        </div>
+                        <div class="mb-3">
+                            <label for="contact" class="form-label">Contact</label>
+                            <input type="tel" name="contact" class="form-control" id="Contact">
+                        </div>
+                        <div class="mb-3">
+                            <label for="user" class="form-label">User</label>
+                            <input type="text" name="user" class="form-control" id="user" placeholder="User">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" id="btn">Submit</button>
+                    </form>
+                </div>
+            </div>
+
+
 
     <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAcB-kOKA41-ZFE5Fjn-XDbHfGTDbO9nRI&libraries=places&callback=initMap&v=weekly" async></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAcB-kOKA41-ZFE5Fjn-XDbHfGTDbO9nRI&libraries=places&callback=initMap&v=weekly" async></script>
+    <script type="text/javascript">
+            function logSubmit(event) {
+                let name = document.forms["form1"]['name'].value;
+                let description = document.forms["form1"]['description'].value;
+                let contact = document.forms["form1"]['contact'].value;
+                let user = document.forms["form1"]['user'].value;
+              
+                if (!name  || !description || !contact || !user|| !lat || !lng) {
+                        window.alert(`Please enter all information!`);
+                        return false;
+                    }
+                    else{
+                        let first = [markers[0].position.lat(), markers[0].position.lng()];
+                        let second = [markers[1].position.lat(), markers[1].position.lng()];
+                        var data = {
+                        name: document.forms["form1"]['name'].value,
+                        description: document.forms["form1"]['description'].value,
+                        contact: document.forms["form1"]['contact'].value,
+                        user: document.forms["form1"]['user'].value,
+                        path: {
+                            from: first,
+                            to: second
+                        }
+                        }
+
+                        const url = '192.168.0.199:5000/path';
+
+                        try {
+                            const response = await fetch(url, {
+                                method: 'POST', // или 'PUT'
+                                body: JSON.stringify(data), // данные могут быть 'строкой' или {объектом}!
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            });
+                            const json = await response.json();
+                            console.log('Success:', JSON.stringify(json));
+                        } catch (error) {
+                            console.error('Error:', error);
+                        }
+
+                        
+                    console.log(`Form Submitted! Time stamp: ${event.timeStamp}`)
+                    event.preventDefault();
+                    }
+            }
+
+            const form = document.getElementById('form');
+            form.addEventListener('submit', logSubmit);
+
+
+
+    </script>
 </body>
 
 </html>
