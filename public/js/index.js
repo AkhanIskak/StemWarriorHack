@@ -17,19 +17,19 @@ function initMap() {
     if (markers.length > 1) {
       deleteMarkers();
     }
-    addMarker(event.latLng);
+    addMarker(event.latLng)   ;
   });
-  // add event listeners for the buttons
-  document
-    .getElementById("show-markers")
-    .addEventListener("click", showMarkers);
-  document
-    .getElementById("hide-markers")
-    .addEventListener("click", hideMarkers);
-  document
-    .getElementById("delete-markers")
-    .addEventListener("click", deleteMarkers);
-  // Adds a marker at the center of the map.
+  // // add event listeners for the buttons
+  // document
+  //   .getElementById("show-markers")
+  //   .addEventListener("click", showMarkers);
+  // document
+  //   .getElementById("hide-markers")
+  //   .addEventListener("click", hideMarkers);
+  // document
+  //   .getElementById("delete-markers")
+  //   .addEventListener("click", deleteMarkers);
+  // // Adds a marker at the center of the map.
 }
 
 // Adds a marker to the map and push to the array.
