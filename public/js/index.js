@@ -7,16 +7,16 @@ let options = {
   center: { lat: 43.238949, lng: 76.889709 },
   zoom: 12,
 };
-
-
 function initMap() {
+
   map = new google.maps.Map(document.getElementById("map"), options);
   // This event listener will call addMarker() when the map is clicked.
   map.addListener("click", (event) => {
     if (markers.length > 1) {
       deleteMarkers();
     }
-    addMarker(event.latLng)   ;
+    addMarker(event.latLng);
+    let data = event.latLng.toJSON()
   });
   // // add event listeners for the buttons
   // document
@@ -30,7 +30,6 @@ function initMap() {
   //   .addEventListener("click", deleteMarkers);
   // // Adds a marker at the center of the map.
 }
-
 // Adds a marker to the map and push to the array.
 function addMarker(position) {
     const marker = new google.maps.Marker({
@@ -69,3 +68,4 @@ function deleteMarkers() {
   hideMarkers();
   markers = [];
 }
+
