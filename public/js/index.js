@@ -10,7 +10,6 @@ let options = {
 
 
 function initMap() {
-
   map = new google.maps.Map(document.getElementById("map"), options);
   // This event listener will call addMarker() when the map is clicked.
   map.addListener("click", (event) => {
