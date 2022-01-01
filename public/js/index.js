@@ -18,17 +18,17 @@ function initMap() {
     addMarker(event.latLng);
     let data = event.latLng.toJSON()
   });
-  // // add event listeners for the buttons
-  // document
-  //   .getElementById("show-markers")
-  //   .addEventListener("click", showMarkers);
-  // document
-  //   .getElementById("hide-markers")
-  //   .addEventListener("click", hideMarkers);
-  // document
-  //   .getElementById("delete-markers")
-  //   .addEventListener("click", deleteMarkers);
-  // // Adds a marker at the center of the map.
+  // add event listeners for the buttons
+  document
+    .getElementById("show-markers")
+    .addEventListener("click", showMarkers);
+  document
+    .getElementById("hide-markers")
+    .addEventListener("click", hideMarkers);
+  document
+    .getElementById("delete-markers")
+    .addEventListener("click", deleteMarkers);
+  // Adds a marker at the center of the map.
 }
 // Adds a marker to the map and push to the array.
 function addMarker(position) {
