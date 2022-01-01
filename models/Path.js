@@ -1,5 +1,8 @@
 const mongoose = require('mongoose')
 const PathSchema = new mongoose.Schema({
+    user:{
+        type:String,
+    },
     name: {
         type: String,
         trim: true,
@@ -16,8 +19,13 @@ const PathSchema = new mongoose.Schema({
     contact: {
         type: String,
         required: true,
-
     },
+    from:{
+     type:Array
+    },
+    to:{
+        type:Array
+    }
 
 })
 

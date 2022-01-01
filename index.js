@@ -1,7 +1,10 @@
-const express = require('express');
-const app = express();
+
 const dotenv = require('dotenv');
+const util = require('./util')
+const cookieParser = require('cookie-parser')
+var cors = require('cors')
 const mongoose = require('mongoose');
+const Path = require('./models/Path');
 dotenv.config({ path: "./configuration.env" });
 const db = process.env.DATABASE.replace(
     "<PASSWORD>",
@@ -12,11 +15,75 @@ mongoose
     .then(async () => {
         console.log("connected to database")
     });
-
-app.use(express.json());
+const express = require('express');
+const app = express();
+app.use(cookieParser())
 app.use(express.static('./public'))
-app.post('/')
+app.use(express.json());
+app.use(cors());
+app.post('/path', async (req, res) => {
+    console.log("works")
+    let user;
+    if (!req.cookies.user) {
+        user = util.makeid(5) + Date.now();
+        if (!req.body.contact || !req.body.description || !req.body.name || req.body.path.from.length === 1 || req.body.path.to.length === 1) {
 
+            res.status(500).json({
+                message: "error, fill all the gaps"
+            })
+            return;
+        }
+        // create path;
+        try {
 
+            let path = new Path({
+                user: user, contact: req.body.contact, description: req.body.description, name: req.body.name,
+                from: [req.body.path.from[0], req.body.path.from[1]],
+                to: [req.body.path.to[0], req.body.path.to[1]]
+
+            });
+            await path.save();
+            let pathes = await Path.aggregate([{
+                $geoNear: {
+                    near: { coordinates: [req.body.path.from[0], req.body.path.from[1]] },
+                    key: "from",
+                    distanceField: "dist.calculated",
+                    maxDistance: 200,
+                    includeLocs: "dist.location",
+                    spherical: true
+                }
+            }, {
+
+            }])
+            res.cookie('user', user)
+            res.status(200).json(pathes);
+            //finding near pathes of other people;
+
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({
+                message: "sorry something went wrong"
+            })
+            return
+        }
+    }
+    await Path.findOneAndUpdate({ user: req.cookies.user }, {
+        from: [req.body.path.from[0], req.body.path.from[1]],
+        to: [req.body.path.to[0], req.body.path.to[1]]
+    })
+    let pathes = await Path.aggregate([{
+        $geoNear: {
+            near: { coordinates: [req.body.path.from[0], req.body.path.from[1]] },
+            key: "from",
+            distanceField: "dist.calculated",
+            maxDistance: 200,
+            includeLocs: "dist.location",
+            spherical: true
+        }
+    }, {
+
+    }])
+    res.status(200).json(pathes);
+})
 
 app.listen(process.env.PORT, () => console.log(`server is listening on port ${process.env.PORT}`));
