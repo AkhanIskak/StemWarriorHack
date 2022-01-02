@@ -8,7 +8,7 @@ async function logSubmit(event) {
         return false;
     }
     else {
-        if (!markers[0] || !markers[1])
+        if (!markers[0] && !markers[1])
             alert("Marker the map")
         let first = [markers[0].position.lat(), markers[0].position.lng()];
         let second = [markers[1].position.lat(), markers[1].position.lng()];

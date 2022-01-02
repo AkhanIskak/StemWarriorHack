@@ -1,5 +1,6 @@
 
 @media (max-width: 1800px) and (min-width: 601px){
+h1 { color: #333333; font-family: "Segoe UI", serif; font-size: 50px; font-weight: normal; line-height: 54px; margin: 0 0 54px; text-align:center ; }
 #map {
   height: 80%;
   width: 80%;
@@ -33,6 +34,7 @@ body {
 }
 
 @media (max-width: 600px) {
+h1 { color: #000000; font-family: 'Raleway',sans-serif; font-size: 62px; font-weight: 800; line-height: 72px; margin: 0 0 24px; text-align: center;  }
 #map {
   height: 80%;
   width: 90%;
@@ -64,3 +66,4 @@ body {
   padding-left: 10px;
 }
 }
+
