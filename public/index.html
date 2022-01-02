@@ -87,10 +87,10 @@
                         }
                         }
 
-                        const url = '/path';
-
+                    
                         try {
-                            const response = await fetch(url, {
+                            console.log(window.location)
+                            const response = await fetch(`${window.location.origin}/path`, {
                                 method: 'POST', // или 'PUT'
                                 body: JSON.stringify(data), // данные могут быть 'строкой' или {объектом}!
                                 headers: {

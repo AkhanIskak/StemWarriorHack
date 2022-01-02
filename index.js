@@ -24,7 +24,6 @@ app.use(cors());
 app.post('/path', async (req, res) => {
     console.log("works")
     let user;
-    console.log(data)
     if (!req.cookies.user) {
         user = util.makeid(5) + Date.now();
         if (!req.body.contact || !req.body.description || !req.body.name || req.body.path.from.length === 1 || req.body.path.to.length === 1) {
@@ -80,7 +79,7 @@ app.post('/path', async (req, res) => {
             spherical: true
         }
     }])
-    console.log(pathes)
+    pathes=pathes.filter(el=>el.user!==req.cookies.user)
     await Path.findOneAndUpdate({ user: req.cookies.user }, {
         from: [req.body.path.from[0], req.body.path.from[1]],
         to: [req.body.path.to[0], req.body.path.to[1]]
