@@ -57,6 +57,7 @@ app.post('/path', async (req, res) => {
 
             console.log(pathes)
             res.cookie('user', user)
+            pathes.push([req.body.path.to[0],req.body.path.to[1],200]);
             res.status(200).json(pathes);
             //finding near pathes of other people;
 
@@ -80,6 +81,7 @@ app.post('/path', async (req, res) => {
         }
     }])
     pathes=pathes.filter(el=>el.user!==req.cookies.user)
+    pathes.push([req.body.path.to[0],req.body.path.to[1],200]);
     await Path.findOneAndUpdate({ user: req.cookies.user }, {
         from: [req.body.path.from[0], req.body.path.from[1]],
         to: [req.body.path.to[0], req.body.path.to[1]]
