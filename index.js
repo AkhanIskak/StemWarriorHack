@@ -24,6 +24,7 @@ app.use(cors());
 app.post('/path', async (req, res) => {
     console.log("works")
     let user;
+    console.log(data)
     if (!req.cookies.user) {
         user = util.makeid(5) + Date.now();
         if (!req.body.contact || !req.body.description || !req.body.name || req.body.path.from.length === 1 || req.body.path.to.length === 1) {
@@ -42,8 +43,8 @@ app.post('/path', async (req, res) => {
                 to: [req.body.path.to[0], req.body.path.to[1]]
 
             });
-            await path.save();
-            let pathes = await Path.aggregate([{
+            
+            let pathes = await Path.aggregate([{ 
                 $geoNear: {
                     near: { coordinates: [req.body.path.from[0], req.body.path.from[1]] },
                     key: "from",
@@ -52,9 +53,10 @@ app.post('/path', async (req, res) => {
                     includeLocs: "dist.location",
                     spherical: true
                 }
-            }, {
-
             }])
+            await path.save();
+
+            console.log(pathes)
             res.cookie('user', user)
             res.status(200).json(pathes);
             //finding near pathes of other people;
@@ -67,10 +69,7 @@ app.post('/path', async (req, res) => {
             return
         }
     }
-    await Path.findOneAndUpdate({ user: req.cookies.user }, {
-        from: [req.body.path.from[0], req.body.path.from[1]],
-        to: [req.body.path.to[0], req.body.path.to[1]]
-    })
+
     let pathes = await Path.aggregate([{
         $geoNear: {
             near: { coordinates: [req.body.path.from[0], req.body.path.from[1]] },
@@ -80,9 +79,12 @@ app.post('/path', async (req, res) => {
             includeLocs: "dist.location",
             spherical: true
         }
-    }, {
-
     }])
+    console.log(pathes)
+    await Path.findOneAndUpdate({ user: req.cookies.user }, {
+        from: [req.body.path.from[0], req.body.path.from[1]],
+        to: [req.body.path.to[0], req.body.path.to[1]]
+    })
     res.status(200).json(pathes);
 })
 

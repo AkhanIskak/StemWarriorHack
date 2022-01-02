@@ -63,13 +63,13 @@
     <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAcB-kOKA41-ZFE5Fjn-XDbHfGTDbO9nRI&libraries=places&callback=initMap&v=weekly" async></script>
     <script type="text/javascript">
-            function logSubmit(event) {
+            async function logSubmit(event) {
                 let name = document.forms["form1"]['name'].value;
                 let description = document.forms["form1"]['description'].value;
                 let contact = document.forms["form1"]['contact'].value;
                 let user = document.forms["form1"]['user'].value;
               
-                if (!name  || !description || !contact || !user|| !lat || !lng) {
+                if (!name  || !description || !contact || !user) {
                         window.alert(`Please enter all information!`);
                         return false;
                     }
@@ -87,7 +87,7 @@
                         }
                         }
 
-                        const url = '192.168.0.199:5000/path';
+                        const url = '/path';
 
                         try {
                             const response = await fetch(url, {
@@ -98,6 +98,7 @@
                                 }
                             });
                             const json = await response.json();
+
                             console.log('Success:', JSON.stringify(json));
                         } catch (error) {
                             console.error('Error:', error);
@@ -110,7 +111,10 @@
             }
 
             const form = document.getElementById('form');
-            form.addEventListener('submit', logSubmit);
+            form.addEventListener('submit', (e)=>{
+                logSubmit(e)
+                e.preventDefault();
+            });
 
 
 
